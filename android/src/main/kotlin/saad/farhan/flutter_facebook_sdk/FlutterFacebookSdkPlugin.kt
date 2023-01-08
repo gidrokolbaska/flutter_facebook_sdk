@@ -259,6 +259,7 @@ println('hello?????')
    override fun onNewIntent(intent: Intent): Boolean {
         try {
             // some code
+            println('is it running?')
             deepLinkUrl = AppLinks.getTargetUrl(intent).toString()
             eventSink!!.success(deepLinkUrl)
         } catch (e: NullPointerException) {
