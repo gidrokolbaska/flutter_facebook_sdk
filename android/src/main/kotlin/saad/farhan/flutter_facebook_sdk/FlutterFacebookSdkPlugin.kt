@@ -184,10 +184,11 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     }
 
     private fun initFbSdk() {
+
         FacebookSdk.setAutoInitEnabled(true)
         FacebookSdk.fullyInitialize()
         logger = AppEventsLogger.newLogger(context)
-
+println('hello?????')
         val targetUri = AppLinks.getTargetUrlFromInboundIntent(context, activityPluginBinding!!.activity.intent)
         AppLinkData.fetchDeferredAppLinkData(context, object : AppLinkData.CompletionHandler {
             override fun onDeferredAppLinkDataFetched(appLinkData: AppLinkData?) {
