@@ -188,7 +188,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
         FacebookSdk.setAutoInitEnabled(true)
         FacebookSdk.fullyInitialize()
         logger = AppEventsLogger.newLogger(context)
-println('hello?????')
+println("hello?????")
         val targetUri = AppLinks.getTargetUrlFromInboundIntent(context, activityPluginBinding!!.activity.intent)
         AppLinkData.fetchDeferredAppLinkData(context, object : AppLinkData.CompletionHandler {
             override fun onDeferredAppLinkDataFetched(appLinkData: AppLinkData?) {
@@ -259,7 +259,7 @@ println('hello?????')
    override fun onNewIntent(intent: Intent): Boolean {
         try {
             // some code
-            println('is it running?')
+            println("is it running?")
             deepLinkUrl = AppLinks.getTargetUrl(intent).toString()
             eventSink!!.success(deepLinkUrl)
         } catch (e: NullPointerException) {
