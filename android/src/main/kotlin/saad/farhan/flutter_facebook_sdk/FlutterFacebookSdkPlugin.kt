@@ -25,6 +25,7 @@ import java.lang.NullPointerException
 import java.util.*
 import kotlin.collections.HashMap
 import kotlin.math.log
+import android.util.Log
 
 
 /** FlutterFacebookSdkPlugin */
@@ -188,7 +189,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
         FacebookSdk.setAutoInitEnabled(true)
         FacebookSdk.fullyInitialize()
         logger = AppEventsLogger.newLogger(context)
-        print("hello?????")
+        Log.d("tag1", "hello")
         val targetUri = AppLinks.getTargetUrlFromInboundIntent(context, activityPluginBinding!!.activity.intent)
         AppLinkData.fetchDeferredAppLinkData(context, object : AppLinkData.CompletionHandler {
             override fun onDeferredAppLinkDataFetched(appLinkData: AppLinkData?) {
@@ -259,7 +260,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
    override fun onNewIntent(intent: Intent): Boolean {
         try {
             // some code
-           print("is it running?")
+            Log.d("tag2", "is it working")
             deepLinkUrl = AppLinks.getTargetUrl(intent).toString()
             eventSink!!.success(deepLinkUrl)
         } catch (e: NullPointerException) {
