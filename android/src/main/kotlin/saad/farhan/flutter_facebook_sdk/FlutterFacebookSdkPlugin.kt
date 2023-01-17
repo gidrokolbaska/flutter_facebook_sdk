@@ -207,42 +207,42 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
 
         val targetUri = AppLinks.getTargetUrlFromInboundIntent(context, activityPluginBinding!!.activity.intent)
       
-//AppLinkData.fetchDeferredAppLinkData(context, object : AppLinkData.CompletionHandler {
-//            override fun onDeferredAppLinkDataFetched(appLinkData: AppLinkData?) {
-//
-//                if (appLinkData == null) {
-//                    return;
-//                }
-//Log.d("tag1", appLinkData.targetUri.toString())
-//                deepLinkUrl = appLinkData.targetUri.toString();
-//                if (eventSink != null) {
-//                    eventSink!!.success(deepLinkUrl)
-//                }
-//            }
-//
-//        })
-        AppLinkData.fetchDeferredAppLinkData(context){appLinkData ->
-            if(appLinkData!=null){
-                if(appLinkData.targetUri!=null){
-                    Log.d(
-                        "FB_APP_LINKS",
-                        "Deferred Deeplink Received: " + appLinkData.targetUri
-                            .toString()
-                    )
-                    deepLinkUrl = appLinkData.targetUri.toString()
+AppLinkData.fetchDeferredAppLinkData(context, object : AppLinkData.CompletionHandler {
+            override fun onDeferredAppLinkDataFetched(appLinkData: AppLinkData?) {
+
+                if (appLinkData == null) {
+                    return;
                 }
-                val myRunnable = Runnable{
-                    if(resultDelegate!=null)resultDelegate.success(deepLinkUrl)
+Log.d("tag1", appLinkData.targetUri.toString())
+                deepLinkUrl = appLinkData.targetUri.toString();
+                if (eventSink != null) {
+                    eventSink!!.success(deepLinkUrl)
                 }
-                mainHandler.post(myRunnable)
-            }else{
-                Log.d("FB_APP_LINKS", "Deferred Deeplink Received: null link")
-                val myRunnable = Runnable {
-                    if (resultDelegate != null) resultDelegate.success(deepLinkUrl)
-                }
-                mainHandler.post(myRunnable)
             }
-        }
+
+        })
+//        AppLinkData.fetchDeferredAppLinkData(context){appLinkData ->
+//            if(appLinkData!=null){
+//                if(appLinkData.targetUri!=null){
+//                    Log.d(
+//                        "FB_APP_LINKS",
+//                        "Deferred Deeplink Received: " + appLinkData.targetUri
+//                            .toString()
+//                    )
+//                    deepLinkUrl = appLinkData.targetUri.toString()
+//                }
+//                val myRunnable = Runnable{
+//                    if(resultDelegate!=null)resultDelegate.success(deepLinkUrl)
+//                }
+//                mainHandler.post(myRunnable)
+//            }else{
+//                Log.d("FB_APP_LINKS", "Deferred Deeplink Received: null link")
+//                val myRunnable = Runnable {
+//                    if (resultDelegate != null) resultDelegate.success(deepLinkUrl)
+//                }
+//                mainHandler.post(myRunnable)
+//            }
+//        }
     }
 
         
