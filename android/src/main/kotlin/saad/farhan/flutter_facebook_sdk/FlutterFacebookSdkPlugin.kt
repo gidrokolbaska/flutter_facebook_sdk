@@ -263,6 +263,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activityPluginBinding = binding
         binding.addOnNewIntentListener(this)
+         Log.d("tag4", "ATTACHED TO ACTIVITY")
         initFbSdk(appId,clientId)
     }
 
