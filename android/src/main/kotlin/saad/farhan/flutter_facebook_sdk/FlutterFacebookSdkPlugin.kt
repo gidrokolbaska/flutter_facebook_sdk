@@ -187,6 +187,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     }
 
     private fun initFbSdk() {
+        FacebookSdk.setAutoLogAppEventsEnabled(false)
         FacebookSdk.setApplicationId("539442884807619")
         FacebookSdk.setClientToken("f6e088267ae4a542bbf105fb6d59f6ca")
         FacebookSdk.setAutoInitEnabled(true)
@@ -258,10 +259,7 @@ Log.d("tag1", appLinkData.targetUri.toString())
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activityPluginBinding = binding
         binding.addOnNewIntentListener(this)
-         Handler(Looper.getMainLooper()).run { 
- // тут твой код   
- initFbSdk()
-}
+        initFbSdk()
         
     }
 
