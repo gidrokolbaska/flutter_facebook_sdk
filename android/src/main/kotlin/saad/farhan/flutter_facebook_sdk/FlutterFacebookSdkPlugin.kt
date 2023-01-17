@@ -192,25 +192,29 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     }
 
     private fun initFbSdk(result: Result) {
-
+        Log.d("tag1", "started fb init")
         val resultDelegate: Result = result
+        Log.d("tag1", "assigned resultDelegate")
         // Get a handler that can be used to post to the main thread
         val mainHandler: Handler = Handler(context!!.mainLooper)
+        Log.d("tag1", "assigned mainHandler")
         FacebookSdk.setAutoLogAppEventsEnabled(false)
         FacebookSdk.setApplicationId("539442884807619")
         FacebookSdk.setClientToken("f6e088267ae4a542bbf105fb6d59f6ca")
         FacebookSdk.setAutoInitEnabled(true)
         FacebookSdk.fullyInitialize()
         FacebookSdk.sdkInitialize(context)
-       
+        Log.d("tag1", "called sdkInitialize")
         logger = AppEventsLogger.newLogger(context)
-
+        Log.d("tag1", "assigned logger")
         val targetUri = AppLinks.getTargetUrlFromInboundIntent(context, activityPluginBinding!!.activity.intent)
-      
+        Log.d("tag1", targetUri.toString())
 AppLinkData.fetchDeferredAppLinkData(context, object : AppLinkData.CompletionHandler {
-            override fun onDeferredAppLinkDataFetched(appLinkData: AppLinkData?) {
 
+            override fun onDeferredAppLinkDataFetched(appLinkData: AppLinkData?) {
+                Log.d("tag1", "diving into onDeferredAppLinkDataFetched")
                 if (appLinkData == null) {
+                    Log.d("tag1", "appLinkData is null!!!")
                     return;
                 }
 Log.d("tag1", appLinkData.targetUri.toString())
