@@ -85,11 +85,11 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
         when (call.method) {
             "initializeSDK" -> {
                val args = call.arguments as HashMap<String, Any>
-               val myappId = args["appId"].toString()
-               val myclientId = args["clientId"].toString()
+               appId = args["appId"].toString()
+               clientId = args["clientId"].toString()
                
-                Log.d("tag1", myappId)
-                Log.d("tag2", myclientId)
+                Log.d("tag1", appId)
+                Log.d("tag2", clientId)
             }
             "getPlatformVersion" -> {
                 result.success("Android ${android.os.Build.VERSION.RELEASE}")
@@ -193,9 +193,9 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
         logger.logPurchase(amount.toBigDecimal(), Currency.getInstance(currency), createBundleFromMap(parameters))
     }
 
-    private fun initFbSdk() {
-        //FacebookSdk.setApplicationId(appId)
-       // FacebookSdk.setClientToken(clientId)
+    private fun initFbSdk(String appId,String clientId) {
+        FacebookSdk.setApplicationId(appId)
+       FacebookSdk.setClientToken(clientId)
         FacebookSdk.setAutoInitEnabled(true)
         FacebookSdk.fullyInitialize()
         FacebookSdk.sdkInitialize(context)
@@ -261,7 +261,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activityPluginBinding = binding
         binding.addOnNewIntentListener(this)
-        initFbSdk()
+        initFbSdk(appId,clientId)
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
