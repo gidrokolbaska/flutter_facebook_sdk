@@ -219,6 +219,7 @@ AppLinkData.fetchDeferredAppLinkData(context
         Log.d("tag1", appLinkData.targetUri.toString())
         deepLinkUrl = appLinkData.targetUri.toString();
         if (eventSink != null) {
+            Log.d("tag1", "dove into eventSink")
             eventSink!!.success(deepLinkUrl)
         }
     }
