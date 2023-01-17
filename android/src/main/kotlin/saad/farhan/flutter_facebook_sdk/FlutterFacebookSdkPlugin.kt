@@ -258,7 +258,10 @@ Log.d("tag1", appLinkData.targetUri.toString())
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activityPluginBinding = binding
         binding.addOnNewIntentListener(this)
-         runOnUiThread{initFbSdk()}
+         Handler(Looper.getMainLooper()).run { 
+ // тут твой код   
+ initFbSdk()
+}
         
     }
 
