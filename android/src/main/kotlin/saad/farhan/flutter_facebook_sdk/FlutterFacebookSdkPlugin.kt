@@ -84,12 +84,12 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
         when (call.method) {
             "initializeSDK" -> {
-                val myappId = call.argument("appId")
-                val myclientId = call.argument("clientId")
-                appId = myappId
-                clientId = myclientId
-                Log.d("tag1", appId)
-                Log.d("tag2", clientId)
+               val args = call.arguments as HashMap<String, Any>
+               val myappId = args["appId"].toString()
+               val myclientId = args["clientId"].toString()
+               
+                Log.d("tag1", myappId)
+                Log.d("tag2", myclientId)
             }
             "getPlatformVersion" -> {
                 result.success("Android ${android.os.Build.VERSION.RELEASE}")

@@ -56,10 +56,13 @@ class FlutterFacebookSdk {
   /// InitializeSDK manually
   Future<bool> initializeSDK(
       {required String appId, required String clientId}) async {
-    await _channel.invokeMethod("initializeSDK", <String, dynamic>{
-      'appId': appId,
-      'clientId': clientId,
-    });
+    await _channel.invokeMethod(
+      "initializeSDK",
+      <String, dynamic>{
+        'appId': appId,
+        'clientId': clientId,
+      },
+    );
     return true;
   }
 
