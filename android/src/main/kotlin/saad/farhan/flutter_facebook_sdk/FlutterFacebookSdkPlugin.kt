@@ -184,7 +184,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
         logger.logPurchase(amount.toBigDecimal(), Currency.getInstance(currency), createBundleFromMap(parameters))
     }
 
-    private fun initFbSdk(appId:String,clientId:String) {
+    private fun initFbSdk() {
         FacebookSdk.setApplicationId("539442884807619")
         FacebookSdk.setClientToken("f6e088267ae4a542bbf105fb6d59f6ca")
         FacebookSdk.setAutoInitEnabled(true)
@@ -201,7 +201,7 @@ AppLinkData.fetchDeferredAppLinkData(context, object : AppLinkData.CompletionHan
                 if (appLinkData == null) {
                     return;
                 }
-Log.d("tag1", appLinkData)
+Log.d("tag1", appLinkData.targetUri.toString())
                 deepLinkUrl = appLinkData.targetUri.toString();
                 if (eventSink != null && deepLinkUrl != null) {
                     eventSink!!.success(deepLinkUrl)
