@@ -302,6 +302,7 @@ Log.d("tag1", appLinkData.targetUri.toString())
     override   fun onNewIntent(intent: Intent): Boolean {
         try {
             // some code
+            Log.d("Tag1","onNewIntent")
             deepLinkUrl = AppLinks.getTargetUrl(intent).toString()
             eventSink!!.success(deepLinkUrl)
         } catch (e: NullPointerException) {
