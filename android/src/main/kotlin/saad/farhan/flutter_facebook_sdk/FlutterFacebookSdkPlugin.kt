@@ -26,6 +26,8 @@ import java.util.*
 import kotlin.collections.HashMap
 import kotlin.math.log
 import android.util.Log
+import android.os.Looper
+import android.os.Handler
 
 
 /** FlutterFacebookSdkPlugin */
