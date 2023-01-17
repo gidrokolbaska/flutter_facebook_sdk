@@ -49,6 +49,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     private var queuedLinks: List<String> = emptyList()
     private var eventSink: EventSink? = null
     private var context: Context? = null
+    private var myResult: Result?=null
     private var activityPluginBinding: ActivityPluginBinding? = null
 
     //  fun registerWith(registrar: Registrar) {
@@ -83,7 +84,11 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
 
     override  fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
-
+"initFB"->{
+    val appId:String = call.argument("appId")
+    val clientId:String = call.argument("clientId")
+    initFbSdk(result)
+}
             "getPlatformVersion" -> {
                 result.success("Android ${android.os.Build.VERSION.RELEASE}")
             }
@@ -286,7 +291,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     override  fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activityPluginBinding = binding
         binding.addOnNewIntentListener(this)
-         initFbSdk()
+//         initFbSdk(result)
         
     }
 
