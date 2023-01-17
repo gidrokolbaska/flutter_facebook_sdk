@@ -25,7 +25,6 @@ import java.lang.NullPointerException
 import java.util.*
 import kotlin.collections.HashMap
 import kotlin.math.log
-import android.util.Log
 
 
 /** FlutterFacebookSdkPlugin */
@@ -41,9 +40,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     private lateinit var logger: AppEventsLogger
 
 
-    private var deepLinkUrl: String = "Unknown url"
-    private var appId:String = ""
-    private var clientId:String=""
+    private var deepLinkUrl: String = "Saad Farhan"
     private var PLATFORM_CHANNEL: String = "flutter_facebook_sdk/methodChannel"
     private var EVENTS_CHANNEL: String = "flutter_facebook_sdk/eventChannel"
     private var queuedLinks: List<String> = emptyList()
@@ -58,7 +55,6 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     //  }
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-        Log.d("tag9", "can you finally work")
         methodChannel = MethodChannel(flutterPluginBinding.binaryMessenger, PLATFORM_CHANNEL)
         methodChannel.setMethodCallHandler(this)
 
@@ -66,7 +62,6 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
         eventChannel.setStreamHandler(this)
 
         context = flutterPluginBinding.applicationContext
-        Log.d("tag1", "hello????")
     }
 
 
@@ -85,16 +80,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
         when (call.method) {
-            "initializeSDK" -> {
-               val args = call.arguments as HashMap<String, Any>
-              appId = args["appId"].toString()
-              clientId = args["clientId"].toString()
-               
-                Log.d("tag1", appId)
-                Log.d("tag2", clientId)
-                 
-                
-            }
+
             "getPlatformVersion" -> {
                 result.success("Android ${android.os.Build.VERSION.RELEASE}")
             }
@@ -197,22 +183,20 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
         logger.logPurchase(amount.toBigDecimal(), Currency.getInstance(currency), createBundleFromMap(parameters))
     }
 
-    private fun initFbSdk(appId:String ,clientId:String ) {
-        Log.d("tag4", appId)
+    private fun initFbSdk(appId:String,clientId:String) {
         FacebookSdk.setApplicationId(appId)
-       FacebookSdk.setClientToken(clientId)
-       FacebookSdk.sdkInitialize(context)
-        FacebookSdk.setAutoInitEnabled(true)
+        FacebookSdk.setClientToken(clientId)
+        FacebookSdk.setAutoInitEnabled(false)
         FacebookSdk.fullyInitialize()
-        
+        FacebookSdk.sdkInitialize(context)
+       
         logger = AppEventsLogger.newLogger(context)
-        Log.d("tag1", "hello")
+
         val targetUri = AppLinks.getTargetUrlFromInboundIntent(context, activityPluginBinding!!.activity.intent)
         AppLinkData.fetchDeferredAppLinkData(context, object : AppLinkData.CompletionHandler {
             override fun onDeferredAppLinkDataFetched(appLinkData: AppLinkData?) {
 
                 if (appLinkData == null) {
-                    Log.d("tag4", "applinkdata is null")
                     return;
                 }
 
@@ -268,25 +252,25 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activityPluginBinding = binding
         binding.addOnNewIntentListener(this)
-         Log.d("tag4", "ATTACHED TO ACTIVITY")
-       initFbSdk("539442884807619","f6e088267ae4a542bbf105fb6d59f6ca")
+        initFbSdk("539442884807619","f6e088267ae4a542bbf105fb6d59f6ca")
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
 
     }
 
-   override fun onNewIntent(intent: Intent): Boolean {
+    override fun onNewIntent(intent: Intent?): Boolean {
         try {
             // some code
-            Log.d("tag2", "is it working")
             deepLinkUrl = AppLinks.getTargetUrl(intent).toString()
             eventSink!!.success(deepLinkUrl)
         } catch (e: NullPointerException) {
             // handler
-            Log.d("tag2", "it is not working")
             return false
         }
+
+
+
         return false
     }
 }
