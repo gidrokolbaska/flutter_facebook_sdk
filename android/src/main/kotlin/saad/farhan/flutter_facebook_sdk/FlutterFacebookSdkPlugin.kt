@@ -27,7 +27,7 @@ import java.util.*
 
 
 /** FlutterFacebookSdkPlugin */
-class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler, ActivityAware, PluginRegistry.NewIntentListener {
+class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler, ActivityAware, PluginRegistry.NewIntentListener {
     /// The MethodChannel that will the communication between Flutter and native Android
     ///
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -43,9 +43,9 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     private var PLATFORM_CHANNEL: String = "flutter_facebook_sdk/methodChannel"
     private var EVENTS_CHANNEL: String = "flutter_facebook_sdk/eventChannel"
     private var queuedLinks: List<String> = emptyList()
-    private var eventSink: EventSink? = null
+    private var eventSink: EventChannel.EventSink? = null
     private var context: Context? = null
-    private var myResult: Result?=null
+    private var myResult: MethodChannel.Result?=null
     private var activityPluginBinding: ActivityPluginBinding? = null
 
     //  fun registerWith(registrar: Registrar) {
@@ -65,12 +65,12 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     }
 
 
-    override  fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         methodChannel.setMethodCallHandler(null)
         eventChannel.setStreamHandler(null)
     }
 
-    override fun onListen(arguments: Any?, events: EventSink?) {
+    override fun onListen(arguments: Any?, events: MethodChannel.EventSink?) {
         eventSink = events
         Log.d("tag1", "event sink: $eventSink")
     }
