@@ -25,6 +25,7 @@ import java.lang.NullPointerException
 import java.util.*
 import kotlin.collections.HashMap
 import kotlin.math.log
+import android.util.Log
 
 
 /** FlutterFacebookSdkPlugin */
