@@ -3,6 +3,8 @@ package saad.farhan.flutter_facebook_sdk
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import androidx.annotation.NonNull
 import bolts.AppLinks
 import com.facebook.FacebookSdk
@@ -18,16 +20,9 @@ import io.flutter.plugin.common.EventChannel.StreamHandler
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry
 import io.flutter.plugin.common.PluginRegistry.Registrar
-import java.lang.NullPointerException
 import java.util.*
-import kotlin.collections.HashMap
-import kotlin.math.log
-import android.util.Log
-import android.os.Looper
-import android.os.Handler
 
 
 /** FlutterFacebookSdkPlugin */
@@ -215,13 +210,19 @@ AppLinkData.fetchDeferredAppLinkData(context, object : AppLinkData.CompletionHan
                 Log.d("tag1", "diving into onDeferredAppLinkDataFetched")
                 if (appLinkData == null) {
                     Log.d("tag1", "appLinkData is null!!!")
-                    return;
+                    val myRunnable =
+                        Runnable { if (resultDelegate != null) resultDelegate.success(deepLinkUrl) }
+
+                    mainHandler.post(myRunnable)
                 }
-Log.d("tag1", appLinkData.targetUri.toString())
-                deepLinkUrl = appLinkData.targetUri.toString();
-                if (eventSink != null) {
-                    eventSink!!.success(deepLinkUrl)
+                else{
+                    Log.d("tag1", appLinkData.targetUri.toString())
+                    deepLinkUrl = appLinkData.targetUri.toString();
+                    if (eventSink != null) {
+                        eventSink!!.success(deepLinkUrl)
+                    }
                 }
+
             }
 
         })
