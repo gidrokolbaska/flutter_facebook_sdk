@@ -195,20 +195,21 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
        
         logger = AppEventsLogger.newLogger(context)
 
-        //val targetUri = AppLinks.getTargetUrlFromInboundIntent(context, activityPluginBinding!!.activity.intent)
-      
-        AppLinkData.fetchDeferredAppLinkData(context, 
-  new AppLinkData.CompletionHandler() {
-     @Override
-     public void onDeferredAppLinkDataFetched(AppLinkData appLinkData) {
-         // Process app link data
-          if (appLinkData == null) {
+        val targetUri = AppLinks.getTargetUrlFromInboundIntent(context, activityPluginBinding!!.activity.intent)
+        AppLinkData.fetchDeferredAppLinkData(context, object : AppLinkData.CompletionHandler {
+            override fun onDeferredAppLinkDataFetched(appLinkData: AppLinkData?) {
+
+                if (appLinkData == null) {
                     return;
                 }
-                Log.d("tag1", appLinkData)
+Log.d("tag1", appLinkData)
+                deepLinkUrl = appLinkData.targetUri.toString();
+                if (eventSink != null && deepLinkUrl != null) {
+                    eventSink!!.success(deepLinkUrl)
+                }
+            }
 
-     }
- }
+        })
     }
 
     private fun createBundleFromMap(parameterMap: Map<String, Any>?): Bundle? {
