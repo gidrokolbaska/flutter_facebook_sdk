@@ -57,7 +57,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     //    methodChannel.setMethodCallHandler(this)
     //  }
 
-    override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+     fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         methodChannel = MethodChannel(flutterPluginBinding.binaryMessenger, PLATFORM_CHANNEL)
         methodChannel.setMethodCallHandler(this)
 
@@ -68,20 +68,20 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     }
 
 
-    override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+     fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         methodChannel.setMethodCallHandler(null)
         eventChannel.setStreamHandler(null)
     }
 
-    override fun onListen(arguments: Any?, events: EventSink?) {
+     fun onListen(arguments: Any?, events: EventSink?) {
         eventSink = events
     }
 
-    override fun onCancel(arguments: Any?) {
+     fun onCancel(arguments: Any?) {
         eventSink = null
     }
 
-    override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+     fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
 
             "getPlatformVersion" -> {
@@ -187,6 +187,10 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     }
 
     private fun initFbSdk() {
+
+        val resultDelegate: Result = result
+        // Get a handler that can be used to post to the main thread
+        val mainHandler: Handler = Handler(context!!.mainLooper)
         FacebookSdk.setAutoLogAppEventsEnabled(false)
         FacebookSdk.setApplicationId("539442884807619")
         FacebookSdk.setClientToken("f6e088267ae4a542bbf105fb6d59f6ca")
@@ -198,23 +202,46 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
 
         val targetUri = AppLinks.getTargetUrlFromInboundIntent(context, activityPluginBinding!!.activity.intent)
       
-AppLinkData.fetchDeferredAppLinkData(context, object : AppLinkData.CompletionHandler {
-            override fun onDeferredAppLinkDataFetched(appLinkData: AppLinkData?) {
-
-                if (appLinkData == null) {
-                    return;
+//AppLinkData.fetchDeferredAppLinkData(context, object : AppLinkData.CompletionHandler {
+//            override fun onDeferredAppLinkDataFetched(appLinkData: AppLinkData?) {
+//
+//                if (appLinkData == null) {
+//                    return;
+//                }
+//Log.d("tag1", appLinkData.targetUri.toString())
+//                deepLinkUrl = appLinkData.targetUri.toString();
+//                if (eventSink != null) {
+//                    eventSink!!.success(deepLinkUrl)
+//                }
+//            }
+//
+//        })
+        AppLinkData.fetchDeferredAppLinkData(context){appLinkData ->
+            if(appLinkData!=null){
+                if(appLinkData.targetUri!=null){
+                    Log.d(
+                        "FB_APP_LINKS",
+                        "Deferred Deeplink Received: " + appLinkData.targetUri
+                            .toString()
+                    )
+                    deepLinkUrl = appLinkData.targetUri.toString()
                 }
-Log.d("tag1", appLinkData.targetUri.toString())
-                deepLinkUrl = appLinkData.targetUri.toString();
-                if (eventSink != null && deepLinkUrl != null) {
-                    eventSink!!.success(deepLinkUrl)
+                val myRunnable = Runnable{
+                    if(resultDelegate!=null)resultDelegate.success(deepLinkUrl)
                 }
+                mainHandler.post(myRunnable)
+            }else{
+                Log.d("FB_APP_LINKS", "Deferred Deeplink Received: null link")
+                val myRunnable = Runnable {
+                    if (resultDelegate != null) resultDelegate.success(deepLinkUrl)
+                }
+                mainHandler.post(myRunnable)
             }
-
-        })
+        }
+    }
 
         
-    }
+
 
     private fun createBundleFromMap(parameterMap: Map<String, Any>?): Bundle? {
         if (parameterMap == null) {
@@ -246,28 +273,28 @@ Log.d("tag1", appLinkData.targetUri.toString())
         return bundle
     }
 
-    override fun onDetachedFromActivity() {
+    fun onDetachedFromActivity() {
 
     }
 
-    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+     fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
         activityPluginBinding!!.removeOnNewIntentListener(this);
         activityPluginBinding = binding;
         binding.addOnNewIntentListener(this);
     }
 
-    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+     fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activityPluginBinding = binding
         binding.addOnNewIntentListener(this)
-        initFbSdk()
+         initFbSdk()
         
     }
 
-    override fun onDetachedFromActivityForConfigChanges() {
+     fun onDetachedFromActivityForConfigChanges() {
 
     }
 
-    override fun onNewIntent(intent: Intent): Boolean {
+     fun onNewIntent(intent: Intent): Boolean {
         try {
             // some code
             deepLinkUrl = AppLinks.getTargetUrl(intent).toString()
