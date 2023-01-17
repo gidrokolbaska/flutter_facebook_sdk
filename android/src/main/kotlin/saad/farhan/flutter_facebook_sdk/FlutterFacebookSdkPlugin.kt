@@ -92,6 +92,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
                
                 Log.d("tag1", appId)
                 Log.d("tag2", clientId)
+                 initFbSdk(appId,clientId)
                 
             }
             "getPlatformVersion" -> {
@@ -268,7 +269,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
         activityPluginBinding = binding
         binding.addOnNewIntentListener(this)
          Log.d("tag4", "ATTACHED TO ACTIVITY")
-        initFbSdk(appId,clientId)
+       
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
