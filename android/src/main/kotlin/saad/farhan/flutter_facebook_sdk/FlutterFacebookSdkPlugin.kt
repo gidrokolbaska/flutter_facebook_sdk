@@ -11,17 +11,21 @@ import com.facebook.FacebookSdk
 import com.facebook.appevents.AppEventsConstants
 import com.facebook.appevents.AppEventsLogger
 import com.facebook.applinks.AppLinkData
-import io.flutter.embedding.engine.plugins.FlutterPlugin
-import io.flutter.embedding.engine.plugins.activity.ActivityAware
-import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
-import io.flutter.plugin.common.EventChannel
-import io.flutter.plugin.common.EventChannel.EventSink
-import io.flutter.plugin.common.EventChannel.StreamHandler
-import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import io.flutter.plugin.common.PluginRegistry
-import io.flutter.plugin.common.PluginRegistry.Registrar
+import io.flutter.plugin.common.BinaryMessenger;
+import io.flutter.plugin.common.EventChannel;
+import io.flutter.plugin.common.MethodCall;
+import io.flutter.plugin.common.MethodChannel;
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
+import io.flutter.plugin.common.MethodChannel.Result;
+import io.flutter.plugin.common.PluginRegistry;
+import io.flutter.embedding.engine.plugins.FlutterPlugin;
+import io.flutter.embedding.engine.plugins.activity.ActivityAware;
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
+import io.flutter.embedding.engine.plugins.FlutterPlugin;
+import io.flutter.embedding.engine.plugins.activity.ActivityAware;
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
+import io.flutter.plugin.common.PluginRegistry;
+import io.flutter.plugin.common.PluginRegistry.Registrar;
 import java.util.*
 
 
@@ -53,7 +57,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     //    methodChannel.setMethodCallHandler(this)
     //  }
 
-    override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+    override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         methodChannel = MethodChannel(flutterPluginBinding.binaryMessenger, PLATFORM_CHANNEL)
         methodChannel.setMethodCallHandler(this)
 
@@ -77,7 +81,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
         eventSink = null
     }
 
-    override  fun onMethodCall(call: MethodCall, result: Result) {
+    override  fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
 "initializeSDK"->{
     val appId:String? = call.argument("appId")
@@ -186,9 +190,10 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
         logger.logPurchase(amount.toBigDecimal(), Currency.getInstance(currency), createBundleFromMap(parameters))
     }
 
-    private fun initFbSdk(result: Result) {
+    private fun initFbSdk(result: MethodChannel.Result) {
         Log.d("tag1", "started fb init")
-        val resultDelegate: Result = result
+        val resultDelegate: MethodChannel.Result = result
+
         Log.d("tag1", "assigned resultDelegate")
         // Get a handler that can be used to post to the main thread
         val mainHandler: Handler = Handler(context!!.mainLooper)
@@ -204,28 +209,23 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
         Log.d("tag1", "assigned logger")
 //        val targetUri = AppLinks.getTargetUrlFromInboundIntent(context, activityPluginBinding!!.activity.intent)
 //        Log.d("tag1", targetUri.toString())
-AppLinkData.fetchDeferredAppLinkData(context, object : AppLinkData.CompletionHandler {
+AppLinkData.fetchDeferredAppLinkData(context
+) { appLinkData ->
+    Log.d("tag1", "diving into onDeferredAppLinkDataFetched")
+    if (appLinkData == null) {
+        Log.d("tag1", "appLinkData is null!!!")
+        val myRunnable =
+            Runnable { resultDelegate.success(deepLinkUrl) }
 
-            override fun onDeferredAppLinkDataFetched(appLinkData: AppLinkData?) {
-                Log.d("tag1", "diving into onDeferredAppLinkDataFetched")
-                if (appLinkData == null) {
-                    Log.d("tag1", "appLinkData is null!!!")
-                    val myRunnable =
-                        Runnable { if (resultDelegate != null) resultDelegate.success(deepLinkUrl) }
-
-                    mainHandler.post(myRunnable)
-                }
-                else{
-                    Log.d("tag1", appLinkData.targetUri.toString())
-                    deepLinkUrl = appLinkData.targetUri.toString();
-                    if (eventSink != null) {
-                        eventSink!!.success(deepLinkUrl)
-                    }
-                }
-
-            }
-
-        })
+        mainHandler.post(myRunnable)
+    } else {
+        Log.d("tag1", appLinkData.targetUri.toString())
+        deepLinkUrl = appLinkData.targetUri.toString();
+        if (eventSink != null) {
+            eventSink!!.success(deepLinkUrl)
+        }
+    }
+}
 //        AppLinkData.fetchDeferredAppLinkData(context){appLinkData ->
 //            if(appLinkData!=null){
 //                if(appLinkData.targetUri!=null){
