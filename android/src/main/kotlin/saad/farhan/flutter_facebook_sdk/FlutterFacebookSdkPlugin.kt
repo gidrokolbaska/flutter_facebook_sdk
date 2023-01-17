@@ -207,6 +207,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
             override fun onDeferredAppLinkDataFetched(appLinkData: AppLinkData?) {
 
                 if (appLinkData == null) {
+                    Log.d("tag4", "applinkdata is null")
                     return;
                 }
 
