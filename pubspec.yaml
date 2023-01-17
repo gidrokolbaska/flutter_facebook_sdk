@@ -34,8 +34,8 @@ flutter:
       android:
         pluginClass: FlutterFacebookSdkPlugin
         package: saad.farhan.flutter_facebook_sdk
-      # android:
-      #   pluginClass: FlutterFacebookSdkPlugin
+      android:
+        pluginClass: FlutterFacebookSdkPlugin
       ios:
         pluginClass: FlutterFacebookSdkPlugin
 
