@@ -197,6 +197,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     }
 
     private fun initFbSdk(appId:String ,clientId:String ) {
+        Log.d("tag4", appId)
         FacebookSdk.setApplicationId(appId)
        FacebookSdk.setClientToken(clientId)
         FacebookSdk.setAutoInitEnabled(true)
