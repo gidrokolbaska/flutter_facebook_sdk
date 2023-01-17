@@ -57,7 +57,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     //    methodChannel.setMethodCallHandler(this)
     //  }
 
-     fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+    override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         methodChannel = MethodChannel(flutterPluginBinding.binaryMessenger, PLATFORM_CHANNEL)
         methodChannel.setMethodCallHandler(this)
 
@@ -68,20 +68,20 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     }
 
 
-     fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+    override  fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         methodChannel.setMethodCallHandler(null)
         eventChannel.setStreamHandler(null)
     }
 
-     fun onListen(arguments: Any?, events: EventSink?) {
+    override fun onListen(arguments: Any?, events: EventSink?) {
         eventSink = events
     }
 
-     fun onCancel(arguments: Any?) {
+    override  fun onCancel(arguments: Any?) {
         eventSink = null
     }
 
-     fun onMethodCall(call: MethodCall, result: Result) {
+    override  fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
 
             "getPlatformVersion" -> {
@@ -273,28 +273,28 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
         return bundle
     }
 
-    fun onDetachedFromActivity() {
+    override  fun onDetachedFromActivity() {
 
     }
 
-     fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+    override   fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
         activityPluginBinding!!.removeOnNewIntentListener(this);
         activityPluginBinding = binding;
         binding.addOnNewIntentListener(this);
     }
 
-     fun onAttachedToActivity(binding: ActivityPluginBinding) {
+    override  fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activityPluginBinding = binding
         binding.addOnNewIntentListener(this)
          initFbSdk()
         
     }
 
-     fun onDetachedFromActivityForConfigChanges() {
+    override   fun onDetachedFromActivityForConfigChanges() {
 
     }
 
-     fun onNewIntent(intent: Intent): Boolean {
+    override   fun onNewIntent(intent: Intent): Boolean {
         try {
             // some code
             deepLinkUrl = AppLinks.getTargetUrl(intent).toString()
