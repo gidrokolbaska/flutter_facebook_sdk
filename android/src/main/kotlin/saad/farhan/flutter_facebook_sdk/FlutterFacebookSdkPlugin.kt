@@ -259,7 +259,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
 
     }
 
-    override fun onNewIntent(intent: Intent?): Boolean {
+    override fun onNewIntent(intent: Intent): Boolean {
         try {
             // some code
             deepLinkUrl = AppLinks.getTargetUrl(intent).toString()
