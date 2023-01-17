@@ -65,6 +65,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
         eventChannel.setStreamHandler(this)
 
         context = flutterPluginBinding.applicationContext
+        Log.d("tag1", "hello????")
     }
 
 
