@@ -196,7 +196,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
         logger = AppEventsLogger.newLogger(context)
 
         val targetUri = AppLinks.getTargetUrlFromInboundIntent(context, activityPluginBinding!!.activity.intent)
-       runOnUiThread{
+      
 AppLinkData.fetchDeferredAppLinkData(context, object : AppLinkData.CompletionHandler {
             override fun onDeferredAppLinkDataFetched(appLinkData: AppLinkData?) {
 
@@ -211,8 +211,6 @@ Log.d("tag1", appLinkData.targetUri.toString())
             }
 
         })
-       }
-
 
         
     }
@@ -260,7 +258,8 @@ Log.d("tag1", appLinkData.targetUri.toString())
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activityPluginBinding = binding
         binding.addOnNewIntentListener(this)
-        initFbSdk()
+         runOnUiThread{initFbSdk()}
+        
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
