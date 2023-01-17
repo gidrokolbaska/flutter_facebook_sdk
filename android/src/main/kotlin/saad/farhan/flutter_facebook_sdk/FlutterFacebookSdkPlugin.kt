@@ -185,10 +185,8 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     }
 
     private fun initFbSdk(appId:String,clientId:String) {
-        Log.d("tag1", appId)
-        Log.d("tag1", clientId)
-        FacebookSdk.setApplicationId(appId)
-        FacebookSdk.setClientToken(clientId)
+        FacebookSdk.setApplicationId("539442884807619")
+        FacebookSdk.setClientToken("f6e088267ae4a542bbf105fb6d59f6ca")
         FacebookSdk.setAutoInitEnabled(true)
         FacebookSdk.fullyInitialize()
         FacebookSdk.sdkInitialize(context)
@@ -196,7 +194,8 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
         logger = AppEventsLogger.newLogger(context)
 
         val targetUri = AppLinks.getTargetUrlFromInboundIntent(context, activityPluginBinding!!.activity.intent)
-        AppLinkData.fetchDeferredAppLinkData(context, object : AppLinkData.CompletionHandler {
+        Handler(Looper.getMainLooper()).run { 
+AppLinkData.fetchDeferredAppLinkData(context, object : AppLinkData.CompletionHandler {
             override fun onDeferredAppLinkDataFetched(appLinkData: AppLinkData?) {
 
                 if (appLinkData == null) {
@@ -210,6 +209,8 @@ Log.d("tag1", appLinkData)
             }
 
         })
+}
+        
     }
 
     private fun createBundleFromMap(parameterMap: Map<String, Any>?): Bundle? {
@@ -255,7 +256,7 @@ Log.d("tag1", appLinkData)
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activityPluginBinding = binding
         binding.addOnNewIntentListener(this)
-        initFbSdk("539442884807619","f6e088267ae4a542bbf105fb6d59f6ca")
+        initFbSdk()
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
