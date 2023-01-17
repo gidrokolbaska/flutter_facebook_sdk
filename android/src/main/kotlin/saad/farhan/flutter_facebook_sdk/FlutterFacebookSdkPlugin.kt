@@ -85,8 +85,8 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     override  fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
 "initFB"->{
-    val appId:String = call.argument("appId")
-    val clientId:String = call.argument("clientId")
+    val appId:String? = call.argument("appId")
+    val clientId:String? = call.argument("clientId")
     initFbSdk(result)
 }
             "getPlatformVersion" -> {
