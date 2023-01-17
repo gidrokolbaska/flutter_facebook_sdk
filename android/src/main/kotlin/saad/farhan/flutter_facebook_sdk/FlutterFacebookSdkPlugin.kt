@@ -275,6 +275,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
             eventSink!!.success(deepLinkUrl)
         } catch (e: NullPointerException) {
             // handler
+            Log.d("tag2", "it is not working")
             return false
         }
         return false
