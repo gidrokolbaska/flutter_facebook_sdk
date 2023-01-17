@@ -186,7 +186,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
         logger.logPurchase(amount.toBigDecimal(), Currency.getInstance(currency), createBundleFromMap(parameters))
     }
 
-    private fun initFbSdk() {
+    private fun initFbSdk(result: Result) {
 
         val resultDelegate: Result = result
         // Get a handler that can be used to post to the main thread
