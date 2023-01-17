@@ -70,7 +70,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, EventChannel.
         eventChannel.setStreamHandler(null)
     }
 
-    override fun onListen(arguments: Any?, events: MethodChannel.EventSink?) {
+    override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
         eventSink = events
         Log.d("tag1", "event sink: $eventSink")
     }
