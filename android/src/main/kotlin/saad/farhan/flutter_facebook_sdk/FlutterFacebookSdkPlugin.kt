@@ -200,9 +200,10 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
         Log.d("tag4", appId)
         FacebookSdk.setApplicationId(appId)
        FacebookSdk.setClientToken(clientId)
+       FacebookSdk.sdkInitialize(context)
         FacebookSdk.setAutoInitEnabled(true)
         FacebookSdk.fullyInitialize()
-        FacebookSdk.sdkInitialize(context)
+        
         logger = AppEventsLogger.newLogger(context)
         Log.d("tag1", "hello")
         val targetUri = AppLinks.getTargetUrlFromInboundIntent(context, activityPluginBinding!!.activity.intent)
