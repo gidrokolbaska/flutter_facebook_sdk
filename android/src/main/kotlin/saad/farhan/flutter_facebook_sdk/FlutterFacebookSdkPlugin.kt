@@ -188,22 +188,28 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
         Log.d("tag1", appId)
         Log.d("tag1", clientId)
         FacebookSdk.setApplicationId(appId)
-                            FacebookSdk.setClientToken(clientId)
-                            FacebookSdk.setAutoInitEnabled(true)
-                            FacebookSdk.fullyInitialize()
-                            FacebookSdk.sdkInitialize(this@MainActivity.applicationContext) {
-                                AppEventsLogger.activateApp(this@MainActivity.applicationContext as Application)
-                                AppLinkData.fetchDeferredAppLinkData(this@MainActivity) { completionHandler ->
-                                    deepLink =
-                                        if (completionHandler != null && completionHandler.targetUri != null) {
-                                            completionHandler.targetUri.toString()
-                                        } else {
-                                            AppLinkData.createFromActivity(this@MainActivity)?.targetUri?.toString()
-                                                ?: ""
-                                        }
-                                    Log.d("AAA", "deeplink: $deepLink")
-                                }
-                            }
+        FacebookSdk.setClientToken(clientId)
+        FacebookSdk.setAutoInitEnabled(true)
+        FacebookSdk.fullyInitialize()
+        FacebookSdk.sdkInitialize(context)
+       
+        logger = AppEventsLogger.newLogger(context)
+
+        val targetUri = AppLinks.getTargetUrlFromInboundIntent(context, activityPluginBinding!!.activity.intent)
+        AppLinkData.fetchDeferredAppLinkData(context, object : AppLinkData.CompletionHandler {
+            override fun onDeferredAppLinkDataFetched(appLinkData: AppLinkData?) {
+
+                if (appLinkData == null) {
+                    return;
+                }
+
+                deepLinkUrl = appLinkData.targetUri.toString();
+                if (eventSink != null && deepLinkUrl != null) {
+                    eventSink!!.success(deepLinkUrl)
+                }
+            }
+
+        })
     }
 
     private fun createBundleFromMap(parameterMap: Map<String, Any>?): Bundle? {
