@@ -42,6 +42,8 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
 
 
     private var deepLinkUrl: String = "Unknown url"
+    private var appId:String? = null
+    private var clientId:String?=null
     private var PLATFORM_CHANNEL: String = "flutter_facebook_sdk/methodChannel"
     private var EVENTS_CHANNEL: String = "flutter_facebook_sdk/eventChannel"
     private var queuedLinks: List<String> = emptyList()
@@ -83,12 +85,12 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
         when (call.method) {
             "initializeSDK" -> {
                val args = call.arguments as HashMap<String, Any>
-              val appId = args["appId"].toString()
-              val clientId = args["clientId"].toString()
+              appId = args["appId"].toString()
+              clientId = args["clientId"].toString()
                
                 Log.d("tag1", appId)
                 Log.d("tag2", clientId)
-                initFbSdk(appId,clientId)
+                
             }
             "getPlatformVersion" -> {
                 result.success("Android ${android.os.Build.VERSION.RELEASE}")
@@ -260,7 +262,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activityPluginBinding = binding
         binding.addOnNewIntentListener(this)
-        
+        initFbSdk(appId,clientId)
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
