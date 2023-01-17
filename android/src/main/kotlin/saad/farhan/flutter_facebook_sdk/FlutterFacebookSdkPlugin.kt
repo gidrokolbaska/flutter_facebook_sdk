@@ -42,6 +42,8 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
 
 
     private var deepLinkUrl: String = "Unknown url"
+    private var appId: String?=null
+    private var clientId: String?=null
     private var PLATFORM_CHANNEL: String = "flutter_facebook_sdk/methodChannel"
     private var EVENTS_CHANNEL: String = "flutter_facebook_sdk/eventChannel"
     private var queuedLinks: List<String> = emptyList()
@@ -81,7 +83,12 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
         when (call.method) {
-
+            "initializeSDK" ->{
+                val myappId = call.argument("appId")
+                val myclientId = call.argument("clientId")
+                appId = myappId
+                clientId = myclientId
+            }
             "getPlatformVersion" -> {
                 result.success("Android ${android.os.Build.VERSION.RELEASE}")
             }
@@ -184,10 +191,12 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
         logger.logPurchase(amount.toBigDecimal(), Currency.getInstance(currency), createBundleFromMap(parameters))
     }
 
-    private fun initFbSdk() {
-
+    private fun initFbSdk(String appId, String clientId) {
+        FacebookSdk.setApplicationId(appId)
+        FacebookSdk.setClientToken(clientId)
         FacebookSdk.setAutoInitEnabled(true)
         FacebookSdk.fullyInitialize()
+        FacebookSdk.sdkInitialize(context)
         logger = AppEventsLogger.newLogger(context)
         Log.d("tag1", "hello")
         val targetUri = AppLinks.getTargetUrlFromInboundIntent(context, activityPluginBinding!!.activity.intent)
@@ -250,7 +259,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activityPluginBinding = binding
         binding.addOnNewIntentListener(this)
-        initFbSdk()
+        initFbSdk(appId,clientId)
     }
 
     override fun onDetachedFromActivityForConfigChanges() {

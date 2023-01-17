@@ -53,9 +53,13 @@ class FlutterFacebookSdk {
     return url;
   }
 
-  /// InitializeSDK for iOS
-  Future<bool> initializeSDK() async {
-    await _channel.invokeMethod("initializeSDK");
+  /// InitializeSDK manually
+  Future<bool> initializeSDK(
+      {required String appId, required String clientId}) async {
+    await _channel.invokeMethod("initializeSDK", <String, dynamic>{
+      'appId': appId,
+      'clientId': clientId,
+    });
     return true;
   }
 
