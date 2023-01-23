@@ -5,13 +5,13 @@ import 'package:flutter/services.dart';
 /// so that multiple streams dont open up
 
 class FlutterFacebookSdk {
-  static final FlutterFacebookSdk? _singleton = FlutterFacebookSdk._internal();
+  static final FlutterFacebookSdk _singleton = FlutterFacebookSdk._internal();
+
+  FlutterFacebookSdk._internal();
 
   factory FlutterFacebookSdk() {
     return _singleton!;
   }
-
-  FlutterFacebookSdk._internal();
 
   /// Method Channel Initilization to register method calls
   static const MethodChannel _channel =
@@ -22,6 +22,13 @@ class FlutterFacebookSdk {
       const EventChannel("flutter_facebook_sdk/eventChannel");
 
   Stream<String>? _onDeepLinkReceived;
+
+  Future<void> initFacebookSdk(String appId, String clientToken) async {
+    await _channel.invokeMethod("initFacebookSdk", {
+      "appId": appId,
+      "clientToken": clientToken,
+    });
+  }
 
   /// Returns a stream listener to handle deep link url changes
   /// Add a listener to this event to get updated deep link url
@@ -51,19 +58,6 @@ class FlutterFacebookSdk {
   Future<String?> get getDeepLinkUrl async {
     final String? url = await _channel.invokeMethod('getDeepLinkUrl');
     return url;
-  }
-
-  /// InitializeSDK manually
-  Future<bool> initializeSDK(
-      {required String appId, required String clientId}) async {
-    await _channel.invokeMethod(
-      "initializeSDK",
-      <String, dynamic>{
-        'appId': appId,
-        'clientId': clientId,
-      },
-    );
-    return true;
   }
 
   /// Logs App Activate Event of FBSDK
@@ -205,7 +199,7 @@ class FlutterFacebookSdk {
   }
 
   /// Only Available in iOS
-  /// Set the advertiser tracking to true or false
+  /// Set the advertiser tracking to truue or false
   /// App events won't work if this is disabled
   Future<bool> setAdvertiserTracking({required bool isEnabled}) async {
     final bool result = await _channel
