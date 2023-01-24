@@ -111,7 +111,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> logEvent(
       {required String eventName,
       double? valueToSum,
-      dynamic? parameters}) async {
+      dynamic parameters}) async {
     await facebookDeepLinks!.logEvent(
         eventName: eventName, parameters: parameters, valueToSum: valueToSum);
   }
