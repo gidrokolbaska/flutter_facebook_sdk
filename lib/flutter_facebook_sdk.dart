@@ -10,7 +10,7 @@ class FlutterFacebookSdk {
   FlutterFacebookSdk._internal();
 
   factory FlutterFacebookSdk() {
-    return _singleton!;
+    return _singleton;
   }
 
   /// Method Channel Initilization to register method calls
@@ -189,7 +189,7 @@ class FlutterFacebookSdk {
   Future<bool> logEvent(
       {required String eventName,
       double? valueToSum,
-      dynamic? parameters}) async {
+      dynamic parameters}) async {
     final bool result = await _channel.invokeMethod("logEvent", {
       'eventName': eventName,
       'valueToSum': valueToSum,
