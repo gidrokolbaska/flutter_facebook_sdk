@@ -287,8 +287,8 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
         FacebookSdk.setClientToken(clientToken)
         FacebookSdk.setAutoInitEnabled(true)
         FacebookSdk.fullyInitialize()
-        FacebookSdk.sdkInitialize(context)
-        AppEventsLogger.activateApp(context)
+        FacebookSdk.sdkInitialize(context as Application)
+        AppEventsLogger.activateApp(context as Application)
         FacebookSdk.setAutoLogAppEventsEnabled(true)
         FacebookSdk.setAdvertiserIDCollectionEnabled(true)
 
